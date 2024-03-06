@@ -1,94 +1,73 @@
 import pygame
-from config import *
+from settings import *
 from tile import Tile
 from player import Player
+from debug import debug
+from support import import_csv_layout, import_forlder
 
 
 class Level:
     def __init__(self):
-        # init sprite attributes
-        self.ground = None
-        self.player = None  # i have created this attribute in order to control the player sprite freely
-        self.tile = None  # that applys at this sprite too
-
         # get the display surface
-        self.screen = pygame.display.get_surface()  # call the screen to draw the objects/sprites on it
-        """
-        _in visible_groupe wird alle sprites, die ich auf dem Screen zeichnen möchte gespeichert
-        _in obsticale is created for the objecte that will collide with the player like rocks, trees, etc.... (it helps
-        with collosion a lot 
-        """
+        self.player = None
+        self.tile = None
+        self.display_surface = pygame.display.get_surface()
 
-        # sprite groups setup
-        self.visible_group = Custom_Group()
-        self.obsticale_group = pygame.sprite.Group()
+        # sprite group setup
+        self.visible_sprites = Custom_visible_group()
+        self.obstacle_sprites = pygame.sprite.Group()
 
         # sprite setup
-        self.generate_sprites()  # create the map and the sprites
+        self.create_map()
 
-    def generate_sprites(self):
-        self.ground = Ground()
-        self.player = Player([self.visible_group], (520, 320),
-                             self.obsticale_group)  # Player(gourps, pos, collision_groupe)
-        self.tile = Tile([self.visible_group], (600, 500), 'tree')
+    def create_map(self):
+        layouts = {
+            'boundary': import_csv_layout('../map/map_FloorBlocks_FloorBlocks.csv')
+        }
+        graphics = {
+            'grass': import_forlder('../graphics/grass')
+        }
+        # for style, layout in layouts.items():
+        #     for row_index, row in enumerate(layout):
+        #         for col_index, col in enumerate(row):
+        #             if col != '-1':
+        #                 x = col_index * TILESIZE
+        #                 y = row_index * TILESIZE
+        #                 if style == 'boundary':
+        #                     Tile((x, y), [self.obstacle_sprites], 'invisible')
+
+        self.player = Player((520, 300), [self.visible_sprites], self.obstacle_sprites)
+
+    def draw(self):
+        self.visible_sprites.custom_draw(self.player)
+
+    def update(self):
+        self.visible_sprites.update()
 
     def run(self):
-        # update
-        self.visible_group.update()
-        self.obsticale_group.update()
-
-        # draw
-        self.visible_group.custom_draw(self.player, self.ground)
+        self.draw()
+        self.update()
 
 
-class Custom_Group(pygame.sprite.Group):
+class Custom_visible_group(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
-        self.screen = pygame.display.get_surface()  # the offset between the player and other sprites, here is seted to [0,0]
-        self.offset = pygame.math.Vector2()
-        self.halfDisplayWidth = pygame.display.get_surface().get_size()[0] / 2
-        self.halfDisplayHeight = pygame.display.get_surface().get_size()[1] / 2
+        self.offset_pos = None
+        self.display_surface = pygame.display.get_surface()
+        self.off_set = pygame.Vector2()
+        self.half_width = self.display_surface.get_size()[0] // 2
+        self.half_height = self.display_surface.get_size()[1] // 2
+        self.ground_surf = pygame.image.load('../graphics/tilemap/Ground2.png')
+        self.ground_rect = self.ground_surf.get_rect(topleft=(0, 0))
 
-    def center_screen_target_offset(self, target):
-        self.offset.x = self.halfDisplayWidth - target.rect.centerx
-        self.offset.y = self.halfDisplayHeight - target.rect.centery
+    def custom_draw(self, player):
+        # self.offset_pos = sprite.rect.topleft
+        self.off_set.x = player.rect.centerx - self.half_width
+        self.off_set.y = player.rect.centery - self.half_height
 
-        """ center the target(player) on the middle of the screen, by adding an offset/ padding between the player 
-        and other sprites. The padding here equales half the size of the screen vertically and herizontally """
+        floor_offset_pos = self.ground_rect.topleft - self.off_set
+        self.display_surface.blit(self.ground_surf, floor_offset_pos)
 
-    def custom_draw(self, player, ground):
-        # functions
-        self.center_screen_target_offset(player)
-
-        # centering the player compared to ground
-        offset_pos_ground = self.offset + ground.rect.topleft
-        pygame.display.get_surface().blit(ground.image, offset_pos_ground)
-
-        # centering the player compared to other sprites
         for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
-            sprites_pos_with_offset = self.offset + sprite.rect.topleft
-            self.screen.blit(sprite.image, sprites_pos_with_offset)
-
-
-"""
-I created this custom class, which iherited from Group class in order to customise the drawing function in Group
-The goal from this class is: 
-1. custom draw the groupe
-    a. so i can draw the ground separately from other sprites in visible_group 
-    ( i want to do that becase the ground has a sprite and a rectangle in other words its a sprite that is visble so it
-    must be in the visible group but it also has to be the first thing that renders (to be at the bottom of other
-    sprites.)
-
-    b. to make a group of sprites that update togather relativ to the player sprite in orderto give the illusion that the 
-    player moving
-
-2. to sort the list of sprite in this gourp so that they update gradually after eachother. Making this sorting list
-adjusts the overlapping objects in the screen
-"""
-
-
-class Ground(pygame.sprite.Sprite):
-    def __init__(self, pos=(0, 0)):
-        super().__init__()
-        self.image = pygame.image.load('../graphics/tilemap/Ground2.png')
-        self.rect = self.image.get_rect(topleft=pos)
+            self.offset_pos = sprite.rect.topleft - self.off_set
+            self.display_surface.blit(sprite.image, self.offset_pos)

@@ -1,14 +1,19 @@
 import pygame
 import sys
-from config import *
-# from level import Level
+from settings import *
 from level import Level
+from support import *
+
 
 class Game:
     def __init__(self):
+
+        # general setup
         pygame.init()
-        self.display_surface = pygame.display.set_mode((SCREEN_W, SCREEN_H))
+        pygame.display.set_caption('Zelda')
+        self.screen = pygame.display.set_mode((WIDTH, HEIGTH), pygame.RESIZABLE)
         self.clock = pygame.time.Clock()
+        # objects
         self.level = Level()
 
     def events(self):
@@ -20,9 +25,9 @@ class Game:
     def run(self):
         while True:
             self.events()
-            self.display_surface.fill('dark green')
+            self.screen.fill('green')
             self.level.run()
-            pygame.display.flip()
+            pygame.display.update()
             self.clock.tick(FPS)
 
 
