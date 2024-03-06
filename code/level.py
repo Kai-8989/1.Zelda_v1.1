@@ -28,19 +28,17 @@ class Level:
 
     def generate_sprites(self):
         self.ground = Ground()
-        self.player = Player([self.visible_group], (500, 500), self.obsticale_group)  # Player(gourps, pos, collision_groupe)
-        self.tile = Tile([self.visible_group, self.obsticale_group], (500, 500), 'invisib')
+        self.player = Player([self.visible_group], (520, 320),
+                             self.obsticale_group)  # Player(gourps, pos, collision_groupe)
+        self.tile = Tile([self.visible_group], (600, 500), 'tree')
 
-    def update(self):
+    def run(self):
+        # update
         self.visible_group.update()
         self.obsticale_group.update()
 
-    def draw(self):
+        # draw
         self.visible_group.custom_draw(self.player, self.ground)
-
-    def run(self):
-        self.update()
-        self.draw()
 
 
 class Custom_Group(pygame.sprite.Group):
@@ -67,7 +65,7 @@ class Custom_Group(pygame.sprite.Group):
         pygame.display.get_surface().blit(ground.image, offset_pos_ground)
 
         # centering the player compared to other sprites
-        for sprite in self.sprites():
+        for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
             sprites_pos_with_offset = self.offset + sprite.rect.topleft
             self.screen.blit(sprite.image, sprites_pos_with_offset)
 

@@ -10,9 +10,10 @@ class Tile(pygame.sprite.Sprite):
             self.image = pygame.Surface((TILE_SIZE, TILE_SIZE), pygame.SRCALPHA)
             self.rect = self.image.get_rect(topleft=pos)
 
-        # elif self.sprite_type == 'ground':
-        #     self.image = pygame.image.load('../graphics/tilemap/Ground2.png')
-        #     self.rect = self.image.get_rect(topleft=pos)
+        elif self.sprite_type == 'tree':
+            self.image = pygame.image.load('../graphics/objects/04.png')
+            self.rect = self.image.get_rect(topleft=pos)
+            self.hitbox = self.rect.inflate(0, -60)
 
         else:
             self.image = surface
