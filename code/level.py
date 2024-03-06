@@ -27,14 +27,14 @@ class Level:
         graphics = {
             'grass': import_forlder('../graphics/grass')
         }
-        # for style, layout in layouts.items():
-        #     for row_index, row in enumerate(layout):
-        #         for col_index, col in enumerate(row):
-        #             if col != '-1':
-        #                 x = col_index * TILESIZE
-        #                 y = row_index * TILESIZE
-        #                 if style == 'boundary':
-        #                     Tile((x, y), [self.obstacle_sprites], 'invisible')
+        for style, layout in layouts.items():
+            for row_index, row in enumerate(layout):
+                for col_index, col in enumerate(row):
+                    if col != '-1':
+                        x = col_index * TILESIZE
+                        y = row_index * TILESIZE
+                        if style == 'boundary':
+                            Tile((x, y), [self.obstacle_sprites], 'invisible')
 
         self.player = Player((520, 300), [self.visible_sprites], self.obstacle_sprites)
 
@@ -57,7 +57,7 @@ class Custom_visible_group(pygame.sprite.Group):
         self.off_set = pygame.Vector2()
         self.half_width = self.display_surface.get_size()[0] // 2
         self.half_height = self.display_surface.get_size()[1] // 2
-        self.ground_surf = pygame.image.load('../graphics/tilemap/Ground2.png')
+        self.ground_surf = pygame.image.load('Ground2.png').convert_alpha()
         self.ground_rect = self.ground_surf.get_rect(topleft=(0, 0))
 
     def custom_draw(self, player):
