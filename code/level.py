@@ -22,14 +22,16 @@ class Level:
 
     def create_map(self):
         layouts = {
-            'boundary': import_csv_layout('../map/map_FloorBlocks_FloorBlocks.csv')
+            'boundary': import_csv_layout('../map/World1_FloorBlocks.csv')
         }
         graphics = {
             'grass': import_forlder('../graphics/grass')
         }
+
         for style, layout in layouts.items():
             for row_index, row in enumerate(layout):
                 for col_index, col in enumerate(row):
+                    print(style)
                     if col != '-1':
                         x = col_index * TILESIZE
                         y = row_index * TILESIZE
