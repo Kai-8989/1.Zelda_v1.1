@@ -29,13 +29,15 @@ class Level:
 
     def generate_sprites(self):
         layouts = {
-            'boundry' : imoprt_layout('../map/map_FloorBlocks.csv')
+            'boundary' : imoprt_layout('../map/map_FloorBlocks.csv')
         }
-        for layout in layouts:
-            for col in layout:
-                if layout == 'boundry':
-                    if col != -1:
-                        x = TILE_SIZE 
+        for type, layout in layouts.items():
+            for row_index, row in enumerate(layout):
+                for col_index, col in enumerate(row):
+                    if layout == 'boundary':
+                            x = TILE_SIZE * col_index
+                            y = TILE_SIZE * row_index
+                            self.tile = Tile([self.visible_group, self.obsticale_group], (x, y), 'hi')
                          
         self.ground = Ground()
         self.player = Player([self.visible_group], (520, 320), self.obsticale_group)  # Player(gourps, pos, collision_groupe)
