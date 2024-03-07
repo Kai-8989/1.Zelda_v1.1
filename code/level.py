@@ -1,4 +1,5 @@
 import pygame
+from support import *
 from config import *
 from tile import Tile
 from player import Player
@@ -27,10 +28,17 @@ class Level:
         self.generate_sprites()  # create the map and the sprites
 
     def generate_sprites(self):
+        layouts = {
+            'boundry' : imoprt_layout('../map/map_FloorBlocks.csv')
+        }
+        for layout in layouts:
+            for col in layout:
+                if layout == 'boundry':
+                    if col != -1:
+                        x = TILE_SIZE 
+                         
         self.ground = Ground()
-        self.player = Player([self.visible_group], (520, 320),
-                             self.obsticale_group)  # Player(gourps, pos, collision_groupe)
-        self.tile = Tile([self.visible_group], (600, 500), 'tree')
+        self.player = Player([self.visible_group], (520, 320), self.obsticale_group)  # Player(gourps, pos, collision_groupe)
 
     def run(self):
         # update
