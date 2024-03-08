@@ -2,10 +2,21 @@ import pygame
 from config import *
 
 
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, groups, pos, obstacles):
         super().__init__(groups)
-        self.image = pygame.image.load('../graphics/player/down/down_0.png').convert_alpha()
+        # prapering the image
+        self.player_ImageSheet = pygame.image.load('../graphics/player/player0.png') # image sheet of the player 
+        self.facing = {
+            'down' : ((TILE_SIZE * 3, 25)),
+            'right' : ((0, 25)),
+            'left' : ((TILE_SIZE * 2, 25)),
+            'up' : ((TILE_SIZE, 25))
+        }
+        
+        # basic setup
+        self.image = self.get_image(self.facing['down']) # get_image crops the required image 
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.inflate(0, -30)
 
@@ -17,7 +28,13 @@ class Player(pygame.sprite.Sprite):
         self.attack_timer = None
 
         self.obstacle_sprites = obstacles
-
+        
+    def get_image(self, pos):
+        sprite = pygame.Surface((TILE_SIZE, TILE_SIZE * 2 - 25))
+        sprite.blit(self.player_ImageSheet, (0, 0), (pos[0], pos[1], TILE_SIZE, TILE_SIZE+400))
+        sprite.set_colorkey('black')
+        return sprite
+    
     def collision(self, direction):
         if direction == 'herizontal':
             for sprite in self.obstacle_sprites:
@@ -40,16 +57,20 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
             self.direction.y = -1
+            self.image = self.get_image(self.facing['up'])
         elif keys[pygame.K_DOWN]:
             self.direction.y = +1
+            self.image = self.get_image(self.facing['down'])
         else:
             self.direction.y = 0
 
         if keys[pygame.K_RIGHT]:
             self.direction.x = +1
+            self.image = self.get_image(self.facing['right'])
+            
         elif keys[pygame.K_LEFT]:
             self.direction.x = -1
-            self.image = pygame.image.load('../graphics/player/left/left_1.png').convert_alpha()
+            self.image = self.get_image(self.facing['left'])
         else:
             self.direction.x = 0
 
