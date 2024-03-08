@@ -31,14 +31,24 @@ class Level:
         layouts = {
             'boundary' : imoprt_layout('../map/map_FloorBlocks.csv')
         }
-        for type, layout in layouts.items():
+        # for layout_type, layout in layouts.items():
+        #     for row_index, row in enumerate(layout):
+        #         for col_index, col in enumerate(row):
+        #             if col != '-1':
+        #                 x = TILE_SIZE * col_index
+        #                 y = TILE_SIZE * row_index
+        #                 if layout_type == 'boundary':
+        #                     Tile([self.visible_group, self.obsticale_group], (x, y), 'hi')
+                         
+        for style, layout in layouts.items():
             for row_index, row in enumerate(layout):
                 for col_index, col in enumerate(row):
-                    if layout == 'boundary':
-                            x = TILE_SIZE * col_index
-                            y = TILE_SIZE * row_index
-                            self.tile = Tile([self.visible_group, self.obsticale_group], (x, y), 'hi')
-                         
+                    print(style)
+                    if col != '-1':
+                        x = col_index * TILE_SIZE
+                        y = row_index * TILE_SIZE
+                        if style == 'boundary':
+                            Tile([self.obsticale_group, self.visible_group], (x, y), 'invisible')
         self.ground = Ground()
         self.player = Player([self.visible_group], (520, 320), self.obsticale_group)  # Player(gourps, pos, collision_groupe)
 
