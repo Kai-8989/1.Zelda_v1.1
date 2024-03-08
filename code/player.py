@@ -19,11 +19,13 @@ class Player(pygame.sprite.Sprite):
         self.obstacle_sprites = obstacles
 
     def collision(self, direction):
-        if direction == 'horizontal':
+        if direction == 'herizontal':
             for sprite in self.obstacle_sprites:
                 if sprite.rect.colliderect(self.hitbox):
                     if self.direction.x > 0:
-                        self.hitbox.right = sprite.rect.left
+                        self.hitbox.right= sprite.rect.left
+                    if self.direction.x < 0:
+                        self.hitbox.left = sprite.rect.right
 
         elif direction == 'vertical':
             for sprite in self.obstacle_sprites:

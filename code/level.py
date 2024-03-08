@@ -27,9 +27,10 @@ class Level:
         # sprite setup
         self.generate_sprites()  # create the map and the sprites
 
+
     def generate_sprites(self):
         layouts = {
-            'boundary' : imoprt_layout('../map/World1_FloorBlocks.csv')
+            'boundary' : import_csv_layout('../map/World1_FloorBlocks.csv')
         }
         for layout_type, layout in layouts.items():
             for row_index, row in enumerate(layout):
@@ -37,10 +38,10 @@ class Level:
                     if col != '-1':
                         print(row_index)
                         print(col_index)
-                        x = TILE_SIZE * row_index
-                        y = TILE_SIZE * col_index
+                        x = TILE_SIZE * col_index
+                        y = TILE_SIZE * row_index
                         if layout_type == 'boundary':
-                            Tile([self.visible_group, self.obsticale_group], (x, y), 'hi')
+                            Tile([self.visible_group, self.obsticale_group], (x, y), 'invisible')
                          
         self.ground = Ground()
         self.player = Player([self.visible_group], (520, 320), self.obsticale_group)  # Player(gourps, pos, collision_groupe)
