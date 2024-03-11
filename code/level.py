@@ -32,27 +32,31 @@ class Level:
         layouts = {
             'boundary' : import_csv_layout('../map/World1_FloorBlocks.csv')
         }
+        graphics = {
+        #     'houses' : import_forlder('../')
+        }
         for layout_type, layout in layouts.items():
             for row_index, row in enumerate(layout):
                 for col_index, col in enumerate(row):
                     if col != '-1':
-                        print(row_index)
-                        print(col_index)
                         x = TILE_SIZE * col_index
                         y = TILE_SIZE * row_index
                         if layout_type == 'boundary':
                             Tile([self.visible_group, self.obsticale_group], (x, y), 'invisible')
                          
         self.ground = Ground()
+        self.tile = Tile([self.visible_group, self.obsticale_group], (400, 300), 'fountain')
         self.player = Player([self.visible_group], (520, 320), self.obsticale_group)  # Player(gourps, pos, collision_groupe)
 
     def run(self):
         # update
+        print(self.visible_group)
         self.visible_group.update()
         self.obsticale_group.update()
 
         # draw
         self.visible_group.custom_draw(self.player, self.ground)
+
 
 
 class Custom_Group(pygame.sprite.Group):

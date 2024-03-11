@@ -18,9 +18,6 @@ def import_forlder(path):
             full_path = path + '/' + image
             img_surface = pygame.image.load(full_path).convert_alpha()
             surface_list.append(img_surface)
-    
-    for n in walk(path):
-        print(n)
     return surface_list
 
 # test_array = [[1, 2, 3, 4, [3, 3, 3]], [1, 2, 3, 4, [4, 4, 4]], [1, 2, 3, 4, [5, 5, 5]]]
