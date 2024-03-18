@@ -1,7 +1,7 @@
 import pygame
 from support import *
 from config import *
-from tile import Tile
+from tile import *
 from player import Player
 
 
@@ -42,15 +42,19 @@ class Level:
                         x = TILE_SIZE * col_index
                         y = TILE_SIZE * row_index
                         if layout_type == 'boundary':
-                            Tile([self.visible_group, self.obsticale_group], (x, y), 'invisible')
+                            # Tile([self.obsticale_group], (x, y))
+                            pass
                          
         self.ground = Ground()
-        self.tile = Tile([self.visible_group, self.obsticale_group], (400, 300), 'fountain')
+        self.fountain = Fountain([self.visible_group, self.obsticale_group], (400, 300))
+        # self.box = Box([self.visible_group, self.obsticale_group], (800, 400))
+        # # self.npc_player = NPC([self.visible_group, self.obsticale_group], (800, 300), 'npc_2')
+        # self.npc_player1 = NPC([self.visible_group, self.obsticale_group], (800, 250), 'npc_1')
+        # self.street_light = Stree_Light([self.visible_group, self.obsticale_group], (800, 800))
         self.player = Player([self.visible_group], (520, 320), self.obsticale_group)  # Player(gourps, pos, collision_groupe)
 
     def run(self):
         # update
-        print(self.visible_group)
         self.visible_group.update()
         self.obsticale_group.update()
 
