@@ -1,6 +1,7 @@
 import pygame
 import sys
 from config import *
+# from level import Level
 from level import Level
 
 class Game:
